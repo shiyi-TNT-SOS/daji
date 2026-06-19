@@ -6,7 +6,7 @@
 
 > AI驱动的双语视频分析与拆解工具
 
-[![Version](https://img.shields.io/badge/version-v1.0-green.svg)](https://github.com/shiyi-TNT-SOS/daji/releases)
+[![Version](https://img.shields.io/badge/version-v1.5-green.svg)](https://github.com/shiyi-TNT-SOS/daji/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![Stars](https://img.shields.io/github/stars/shiyi-TNT-SOS/daji?style=social)](https://github.com/shiyi-TNT-SOS/daji)
@@ -124,7 +124,7 @@ OPENAI_API_KEY = "your-api-key"
 
 ## 📝 更新日志
 
-### v1.0 (2026-06-19)
+### v1.5 (2026-06-19)
 
 - ✅ 初始版本发布
 - ✅ 支持多平台视频分析
