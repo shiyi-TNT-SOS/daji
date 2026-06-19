@@ -54,7 +54,7 @@ python ~/./skills/video-lapian/scripts/generate_html.py "{视频名}_分析/完�
 python ~/./skills/video-lapian/scripts/generate_zip.py "{视频名}_分析" --out "{视频名}_分析/分析图片.zip"
 ```
 
-8. 用 `present_files` 把 HTML 报告呈现给爸爸。
+8. 用 `present_files` 把 HTML 报告呈现给用户查看。
 
 ## 报告结构（12 模块按序）
 
@@ -201,6 +201,6 @@ pip install imageio-ffmpeg Pillow
 ## 示例调用
 
 ```
-爸爸: 妲己拉片，分析这个视频 C:/videos/ad.mp4
+用户: 妲己拉片，分析这个视频 C:/videos/ad.mp4
   → 自动走完 截帧 → 分析 → 生成 → 呈现 全流程
 ```
