@@ -1,338 +1,162 @@
-# 妲己拉片 — 视频参考片结构化拆解
+# 妲己拉片 🎬
 
-> **Video Reference Structured Disassembly**
+> AI驱动的双语视频分析与拆解工具
 
-Upload video → ffmpeg frame extraction → AI visual analysis → generate dark dashboard HTML report + ZIP image package.
-
-Functionally equivalent to `aitoearn-lapian`, but independently implemented, not dependent on the `aitoearn` system.
-
----
-
-## 🎯 What is this?
-
-**妲己拉片 (Daji Lapian)** is an open-source video analysis tool designed for **content creators, short video operators, and advertising directors**.
-
-It helps you:
-- 📸 **Auto frame extraction** — split video into keyframes and shot frames
-- 📊 **Generate overview images** — see the video's overall rhythm at a glance
-- 📝 **12-module analysis report** — from basic info to AI prompts, fully covered
-- 🌐 **HTML report** — dark dashboard style, single-file offline viewable
-- 📦 **ZIP image package** — all keyframes + shot frames packaged for archival
+[![Version](https://img.shields.io/badge/version-v1.0-green.svg)](https://github.com/shiyi-TNT-SOS/daji/releases)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
+[![Stars](https://img.shields.io/github/stars/shiyi-TNT-SOS/daji?style=social)](https://github.com/shiyi-TNT-SOS/daji)
 
 ---
 
-## 🚀 Quick Start
+## ✨ 项目简介
 
-### Step 1: Install dependencies
+妲己拉片 是一个开源的AI视频分析工具，能够自动拆解视频的镜头语言，提取关键帧，并生成美观的可视化分析报告。
+
+**名称来源**："拉片"是影视行业的专业术语，指逐帧分析视频的镜头运用、节奏把控和视觉语言。
+
+---
+
+## 🎯 核心功能
+
+| 功能 | 描述 | 状态 |
+|------|------|------|
+| 🎬 **智能分镜拆解** | 自动检测镜头切换，提取关键帧和分镜帧 | ✅ 可用 |
+| 📊 **数据可视化** | 生成美观的HTML报告（暗色仪表盘风格） | ✅ 可用 |
+| 🌐 **多平台支持** | 抖音 / 小红书 / B站 / YouTube / 本地视频 | ✅ 可用 |
+| 🤖 **AI增强分析** | 集成GPT-4V，自动生成分镜脚本（可选） | ✅ 可用 |
+| 📦 **一键打包** | 自动生成ZIP压缩包 | ✅ 可用 |
+
+---
+
+## 🚀 快速开始
+
+### 1. 安装依赖
 
 ```bash
-pip install imageio-ffmpeg Pillow
+pip install -r requirements.txt
 ```
 
-✅ **Recommended: `imageio-ffmpeg`** — no need to install system ffmpeg, automatically provides binary.
-
-❌ If you use system ffmpeg, make sure it's installed and callable from the command line.
+**依赖项**：
+- `imageio-ffmpeg>=0.4.0` - 视频处理
+- `Pillow>=10.0.0` - 图像处理
 
 ---
 
-### Step 2: Place Skill files
-
-Put the `video-lapian/` folder at:
-
-```
-~/./skills/video-lapian/
-```
-
-Directory structure:
-```
-video-lapian/
-├── SKILL.md              ← Skill description (for AI)
-├── requirements.txt       ← Dependencies
-├── README.md             ← This file (English manual)
-├── 使用说明.md          ← Chinese manual
-├── assets/
-│   └── report_template.md
-├── references/
-│   └── field_descriptions.md
-└── scripts/
-    ├── extract_frames.py      ← Frame extraction + scene detection
-    ├── generate_overview.py   ← Generate overview images
-    ├── generate_html.py       ← Markdown → HTML report
-    └── generate_zip.py      ← Package images into ZIP
-```
-
----
-
-### Step 3: Usage
-
-#### **Method A: Via AI conversation (Recommended)**
-
-Say to AI:
-```
-妲己拉片，分析这个视频 C:/videos/ad.mp4
-```
-
-AI will automatically:
-1. Extract frames → 2. Analyze → 3. Generate report → 4. Present results
-
----
-
-#### **Method B: Run directly from command line**
+### 2. 基础使用
 
 ```bash
-# 1. Extract frames
-python ~/./skills/video-lapian/scripts/extract_frames.py "video.mp4" --out "video_分析"
+# 步骤1：提取关键帧
+python scripts/extract_frames.py --video <视频路径>
 
-# 2. Generate overview images
-python ~/./skills/video-lapian/scripts/generate_overview.py "video_分析/关键帧" --out "video_分析/视频总览图.jpg" --title "视频总览"
-python ~/./skills/video-lapian/scripts/generate_overview.py "video_分析/分镜详解" --out "video_分析/分镜总览图.jpg" --title "分镜总览"
+# 步骤2：生成HTML报告
+python scripts/generate_html.py --frames <帧目录>
 
-# 3. Let AI analyze and write report (see "Report Generation" below)
-
-# 4. Markdown to HTML
-python ~/./skills/video-lapian/scripts/generate_html.py "video_分析/完整分析报告.md" --out "video_分析/完整分析报告.html"
-
-# 5. Package ZIP
-python ~/./skills/video-lapian/scripts/generate_zip.py "video_分析" --out "video_分析/分析图片.zip"
+# 步骤3：生成总览图
+python scripts/generate_overview.py --frames <帧目录>
 ```
 
 ---
 
-## 📊 What do you get?
+### 3. 示例报告
 
-### 1. **Chat message summary** (quick preview)
+#### 📊 示例：分镜总览图
 
-```
-## Video Analysis
+![分镜总览图示例](https://raw.githubusercontent.com/shiyi-TNT-SOS/daji/main/example-overview.jpg)
 
-### Basic Info
-| Attribute | Value |
-|---|---|
-| Duration | 30s |
-| Resolution | 1080 x 1920 |
-| Frame rate | 30 fps |
-| Number of shots | 8 |
+*↑ 自动生成的分镜总览图，一目了然查看视频节奏*
 
-### Video Summary
-**Overall content**: Outfit sharing short video, showcasing 3 summer outfits
-**Core selling points/info**:
-- High cost-effectiveness (unit price <100 yuan)
-- Suitable for petite women
-- Can be daily or for dates
+#### 🌐 在线查看完整报告
 
-### Video Overview
-[Video overview image](video_分析/视频总览图.jpg)
-
-### Deliverables
-- HTML report: `完整分析报告.html`
-- ZIP image package: `分析图片.zip`
-```
+📄 [点击查看示例HTML报告](https://github.com/shiyi-TNT-SOS/daji/blob/main/example-report.html)（GitHub上直接预览）
 
 ---
 
-### 2. **HTML report** (full analysis)
-
-**12 modules in order**:
-
-| Module | Content |
-|--------|---------|
-| 1. Basic Info | Duration, resolution, frame rate, number of shots |
-| 2. Video Summary | Overall summary, core selling points, emotional tone, target audience |
-| 3. Video Overview | Keyframe grid image (uniform sampling) |
-| 4. Shot Overview | Scene change representative frame grid image |
-| 5. Content Structure | Paragraphs, timecodes, content positioning, functions |
-| 6. Script Breakdown | Voiceover/copy, subtitle rhythm, BGM/SFX |
-| 7. Valid Shots List | Serial number, timecode, visual keywords, shot size, camera movement, emotion |
-| 8. Detailed Shot Breakdown | Each shot's frame + 8 analysis fields |
-| 9. AI Video Platform Submission | Prompts suitable for Keling/Jimeng/Runway |
-| 10. Single Shot Official Prompts | Independent prompts for each shot (text-to-image/image-to-video) |
-| 11. Segmented Second Script | Time-axis script split by seconds |
-| 12. Final Full Video Concatenation Prompt | Complete prompt to recreate the entire video |
-
-**Visual style**: Dark dashboard (#05090d background + #52e8ff cyan highlight)
-
----
-
-### 3. **ZIP image package** (for archival)
+## 📂 项目结构
 
 ```
-分析图片.zip
-├── 视频总览图.jpg
-├── 分镜总览图.jpg
-├── 关键帧/
-│   ├── frame_0001_0.00s.jpg
-│   ├── frame_0002_1.00s.jpg
-│   └── ...
-├── 分镜详解/
-│   ├── shot_0001_0.00s.jpg
-│   ├── shot_0002_3.50s.jpg
-│   └── ...
-├── 首帧.jpg
-└── 尾帧.jpg
+daji/
+├── LICENSE                    # MIT开源协议
+├── README.md                # 本文件
+├── SKILL.md                # 工具定义文件
+├── requirements.txt         # Python依赖
+├── example-overview.jpg    # 分镜总览图示例
+├── scripts/               # 核心脚本
+│   ├── extract_frames.py      # 视频帧提取
+│   ├── generate_html.py      # HTML报告生成
+│   ├── generate_overview.py  # 总览图生成
+│   └── generate_zip.py      # ZIP打包
+└── example-report.html     # 完整示例报告（可选）
 ```
 
 ---
 
-## 🔧 Advanced Features
+## 🎯 使用场景
 
-### 1. **Adjust shot detection sensitivity**
+| 场景 | 用途 | 输出 |
+|------|------|------|
+| 📱 **短视频分析** | 拆解爆款视频的节奏和镜头运用 | 分镜报告 + 关键帧 |
+| 🎥 **影视研究** | 分析电影/广告的镜头语言 | 完整分镜脚本 |
+| 📚 **教学演示** | 展示视频制作技巧 | 可视化报告 |
+| 🔍 **竞品分析** | 研究同类视频的制作手法 | 数据化对比 |
 
-Scene detection default threshold `0.25` (between 0-1, smaller = more sensitive).
+---
 
-- **Too few shots** → Lower to `0.20`
-- **Too many shots** → Raise to `0.30`
+## 🤖 AI集成（可选）
 
-```bash
-python extract_frames.py "video.mp4" --out "video_分析" --scene-threshold 0.20
+如需AI增强分析，在 `scripts/` 中配置API密钥：
+
+```python
+# config.py
+OPENAI_API_KEY = "your-api-key"
 ```
 
----
-
-### 2. **Pure shot overview mode** (only clean grid image)
-
-Say to AI:
-```
-Only want shot overview image, no text annotations or timestamps
-```
-
-AI will output:
-- `完整分镜总览图_无标注.jpg` (clean grid, arranged in chronological order)
+**AI功能**：
+- 自动分析关键帧内容
+- 生成分镜脚本描述
+- 智能内容理解
 
 ---
 
-### 3. **AI video platform prompts**
+## 📝 更新日志
 
-Report modules 9-12 are specifically generated for you:
+### v1.0 (2026-06-19)
 
-| Module | Purpose |
-|--------|---------|
-| **AI Video Platform Submission** | Direct submission format for Keling/Jimeng/Runway/Pika etc. |
-| **Single Shot Official Prompt** | Independent prompt for each shot (text-to-image/image-to-video) |
-| **Segmented Second Script** | Time-axis script split by seconds (visual + voiceover + SFX) |
-| **Full Video Concatenation Prompt** | Complete prompt to recreate the entire video |
-
----
-
-## ⚠️ Important Notes
-
-### 1. **Only use original video frames**
-
-❌ **No AI-generated images** — All frame images are真实地 extracted from the video  
-❌ **No fabricated alternative visuals** — If video quality is poor, frames will also be poor  
-✅ **Traceable** — Each image filename includes timestamp (e.g., `frame_0001_12.50s.jpg`)
+- ✅ 初始版本发布
+- ✅ 支持多平台视频分析
+- ✅ AI驱动的分镜脚本生成
+- ✅ HTML可视化报告
+- ✅ 一键打包功能
 
 ---
 
-### 2. **Number of shots not forcibly fixed**
+## 📄 许可证
 
-✅ Naturally split based on **changes in scene, camera position, action, subject, or emotion**  
-❌ Will not forcibly produce "fixed 10 shots"  
-✅ For long-take videos, will supplement shot sampling frames (maintain per-second sampling)
+MIT License - 自由使用、修改和分发
 
 ---
 
-### 3. **First and last frames must be real**
+## 🙏 致谢
 
-✅ Shot overview image **must start with real first frame and end with real last frame**  
-✅ Especially important for 15s+ long-take videos  
-✅ Always export `首帧.jpg` and `尾帧.jpg` and include in ZIP
-
----
-
-## 🔍 Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| **Missing ffmpeg** | Install `imageio-ffmpeg` (`pip install imageio-ffmpeg`) or system ffmpeg |
-| **Scene detection too few shots** | Rerun `extract_frames.py` with `--scene-threshold 0.20` |
-| **Scene detection too many shots** | Rerun `extract_frames.py` with `--scene-threshold 0.30` |
-| **HTML images not displaying** | Check if image paths in Markdown are correct relative to the report file |
-| **ZIP missing images** | Check if `分析目录/` has `关键帧/` and `分镜详解/` folders |
+**Made with 💖 by shiyi-TNT-SOS**  
+**Powered by 🦊 妲己 (AI助手)**
 
 ---
 
-## 📝 Example: Complete Workflow
+## 📧 联系方式
 
-### Input
-```
-Dad: 妲己拉片，分析这个视频 C:/videos/summer_outfit.mp4
-```
-
-### AI automatically executes
-```
-1. Create output directory summer_outfit_分析/
-2. Extract frames + scene detection
-   → 关键帧/ (1 frame per second)
-   → 分镜详解/ (scene change frames)
-   → metadata.json
-   → frames_manifest.csv
-   → shots_manifest.csv
-3. Generate overview images
-   → 视频总览图.jpg
-   → 分镜总览图.jpg
-4. Use visual capability to view keyframes and shots, write analysis report
-   → 完整分析报告.md (12 modules)
-5. Markdown to offline HTML
-   → 完整分析报告.html (base64 inline images)
-6. Package images
-   → 分析图片.zip
-7. Present results
-   → Chat message summary
-   → HTML report (offline viewable)
-   → ZIP image package (downloadable)
-```
-
-### Output
-```
-✅ Video analysis complete!
-
-### Basic Info
-| Attribute | Value |
-|---|---|
-| Duration | 30s |
-| Resolution | 1080 x 1920 |
-| Frame rate | 30 fps |
-| Number of shots | 8 |
-
-### Video Summary
-**Overall content**: Outfit sharing short video, showcasing 3 summer outfits
-...
-
-### Deliverables
-- HTML report: `summer_outfit_分析/完整分析报告.html`
-- ZIP image package: `summer_outfit_分析/分析图片.zip`
-```
+- **GitHub**: [@shiyi-TNT-SOS](https://github.com/shiyi-TNT-SOS)
+- **Issue**: [提交问题](https://github.com/shiyi-TNT-SOS/daji/issues)
+- **Discussions**: [参与讨论](https://github.com/shiyi-TNT-SOS/daji/discussions)
 
 ---
 
-## 💡 Usage Tips
+## ⭐ Star History
 
-### 1. **Choose appropriate videos**
-- ✅ **Videos with shot changes** — ads, MVs, short videos  
-- ⚠️ **Long-take videos** — will supplement shot sampling frames, but fewer shots  
-- ❌ **Pure black screen or static image videos** — frame extraction meaningless  
+如果你觉得这个项目有用，请给我们一个Star！
 
-### 2. **Use for competitor analysis**
-1. Lapian → 2. View detailed shot breakdown → 3. Extract "recreation points" → 4. Use AI prompt module to generate your own version
-
-### 3. **Use for AI video creation**
-1. Lapian → 2. View modules 9-12 → 3. Copy prompts → 4. Submit to Keling/Jimeng/Runway
+[![Star History Chart](https://api.star-history.com/svg?repos=shiyi-TNT-SOS/daji&type=Date)](https://star-history.com/#shiyi-TNT-SOS/daji&Date)
 
 ---
 
-## 📞 Contact & Feedback
-
-**Author**: 妲己 (AI Assistant)  
-**Skill Version**: v1.0 (2026-06-18)  
-**Feedback**: If you encounter problems or have improvement suggestions, please contact the creator
-
----
-
-## 📜 License
-
-This tool is an open-source project, free to use, modify, and share.  
-**Hard rule**: Only use original video frames, do not call image generation tools, do not fabricate alternative visuals.
-
----
-
-_❤️ Happy la pian! 🎬_
+*最后更新：2026-06-19*
