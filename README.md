@@ -62,7 +62,7 @@ python scripts/generate_overview.py --frames <帧目录>
 
 #### 📊 示例：分镜总览图
 
-![分镜总览图示例](https://raw.githubusercontent.com/shiyi-TNT-SOS/daji/main/example-overview.jpg)
+![分镜总览图示例](https://raw.githubusercontent.com/shiyi-TNT-SOS/daji/main/report-screenshot.png)
 
 *↑ 自动生成的分镜总览图，一目了然查看视频节奏*
 
@@ -80,7 +80,7 @@ daji/
 ├── README.md                # 本文件
 ├── SKILL.md                # 工具定义文件
 ├── requirements.txt         # Python依赖
-├── example-overview.jpg    # 分镜总览图示例
+├── report-screenshot.png    # 分镜总览图示例
 ├── scripts/               # 核心脚本
 │   ├── extract_frames.py      # 视频帧提取
 │   ├── generate_html.py      # HTML报告生成
