@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/shiyi-TNT-SOS/daji/main/banner.png" width="100%" alt="AI自动拉片神器 - 5分钟拆出爆款视频分镜">
+</p>
+
 # 妲己拉片 🎬
 
 > AI驱动的双语视频分析与拆解工具
